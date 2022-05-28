@@ -22,12 +22,12 @@
 insert into CONTACT (id, first_name, last_name, email, phone_number, birth_date) values (10001, 'John', 'Smith', 'john.smith@mailinator.com', '(212) 555-1212', '1963-06-03');
 insert into CONTACT (id, first_name, last_name, email, phone_number, birth_date) values (10002, 'Davey', 'Jones', 'davey.jones@locker.com', '(212) 555-3333', '1996-08-07');
 
-insert into USER (id, `name`, email, phone_number) values (10001, 'John Smith', 'john.smith@mailinator.com', '02125551212');
-insert into USER (id, `name`, email, phone_number) values (10002, 'Davey Jones', 'davey.jones@locker.com', '02125553333');
-insert into USER(id , name ,email ,phone_number ) values ( 73, 'Test', 'test@test.com', '01234567890');
+insert into USER (id, `name`, email, phonenumber) values (1, 'John Smith', 'john.smith@mailinator.com', '02125551212');
+insert into USER (id, `name`, email, phonenumber) values (2, 'Davey Jones', 'davey.jones@locker.com', '02125553333');
+insert into USER(id , name ,email ,phonenumber ) values ( 3, 'Test', 'test@test.com', '01234567890');
 
-insert into RESTAURANT (id, `phonenumber`, seats) values (10001, 'AB70UYD', 20);
-insert into RESTAURANT (id, `phonenumber`, seats) values (10002, 'BC19SHH', 5);
+insert into RESTAURANT (id, `name`, phonenumber, postcode) values (1, 'KFC', '04412345678', 'ABC123');
+insert into RESTAURANT (id, `name`, phonenumber, postcode) values (2, 'McDonald','04487654321', '321CBA');
 
 
 
