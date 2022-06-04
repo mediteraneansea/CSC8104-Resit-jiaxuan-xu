@@ -67,7 +67,7 @@ public class Restaurant implements Serializable {
 	public static final String FIND_BY_PHONENUMBER = "Restaurant.findByPhonenumber";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotNull

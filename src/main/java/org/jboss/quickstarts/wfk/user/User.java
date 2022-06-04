@@ -70,7 +70,7 @@ public class User implements Serializable {
     public static final String FIND_BY_EMAIL = "User.findByEmail";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull

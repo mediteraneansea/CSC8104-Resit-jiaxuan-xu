@@ -71,7 +71,7 @@ public class Review implements Serializable {
 	public static final String FIND_ALL_BY_RESTAURANT_ID = "Review.findbyRestaurantId";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ApiModelProperty(readOnly = true)
 	private Long id;
 

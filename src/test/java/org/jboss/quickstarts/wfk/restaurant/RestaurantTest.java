@@ -86,7 +86,7 @@ public class RestaurantTest {
 	@Test
 	@InSequence(1)
 	public void testRegister() throws Exception {
-		Restaurant restaurant = createRestaurantInstance("AB16HOG", 7);
+		Restaurant restaurant = createRestaurantInstance("Pizza","03331234567","AB16HO");
 		Response response = restaurantRestService.createRestaurant(restaurant);
 
 		assertEquals("Unexpected response status", Response.Status.CREATED.getStatusCode(), response.getStatus());
@@ -97,14 +97,14 @@ public class RestaurantTest {
 	@Test
 	@InSequence(2)
 	public void testInvalidRegister() {
-		Restaurant restaurant = createRestaurantInstance("123456789", 0);
+		Restaurant restaurant = createRestaurantInstance("Pasta","0123456789", "A1B2C3");
 
 		try {
 			restaurantRestService.createRestaurant(restaurant);
 			fail("Expected a RestServiceException to be thrown");
 		} catch (RestServiceException e) {
 			assertEquals("Unexpected response status", Response.Status.BAD_REQUEST, e.getStatus());
-			assertEquals("Unexpected response body", 2, e.getReasons().size());
+			assertEquals("Unexpected response body", 1, e.getReasons().size());
 			log.info("Invalid restaurant register attempt failed with return code " + e.getStatus());
 		}
 
@@ -115,11 +115,11 @@ public class RestaurantTest {
 	@InSequence(3)
 	public void testDuplicatePhonenumber() throws Exception {
 		// Register an initial restaurant
-		Restaurant restaurant = createRestaurantInstance("AB16HOO", 7);
+		Restaurant restaurant = createRestaurantInstance("FishChips","01310000111", "B16HOO");
 		restaurantRestService.createRestaurant(restaurant);
 
 		// Register a different restaurant with the same phonenumber
-		Restaurant anotherRestaurant = createRestaurantInstance("AB16HOO", 5);
+		Restaurant anotherRestaurant = createRestaurantInstance("Potato", "01310000111", "B16HOO");
 
 		try {
 			restaurantRestService.createRestaurant(anotherRestaurant);
@@ -138,6 +138,9 @@ public class RestaurantTest {
 	@InSequence(4)
 	public void testGetRestaurantList() {
 		try {
+			Restaurant restaurant = createRestaurantInstance("Pasta","0123456789", "A1B2C3");
+
+			restaurantRestService.createRestaurant(restaurant);
 			Response response = restaurantRestService.retrieveAllRestaurants();
 			List<Restaurant> restaurants = response.readEntity(new GenericType<List<Restaurant>>() {
 			});
@@ -152,15 +155,16 @@ public class RestaurantTest {
 	 * <p>A utility method to construct a {@link Restaurant Restaurant} object for use in
 	 * testing. This object is not persisted.</p>
 	 *
+	 * @param name        The name of restaurant
 	 * @param phonenumber The phonenumber of the Restaurant being created
-	 * @param seats        The seats of the Restaurant being created
+	 * @param postcode    The postcode of restaurant
 	 * @return The Restaurant object create
 	 */
-	private Restaurant createRestaurantInstance(String phonenumber, int seats) {
+	private Restaurant createRestaurantInstance(String name, String phonenumber, String postcode) {
 		Restaurant restaurant = new Restaurant();
-		restaurant.setName(phonenumber);
-		restaurant.setPhonenumber("01212300011");
-		restaurant.setPostcode("ABC123");
+		restaurant.setName(name);
+		restaurant.setPhonenumber(phonenumber);
+		restaurant.setPostcode(postcode);
 		return restaurant;
 	}
 

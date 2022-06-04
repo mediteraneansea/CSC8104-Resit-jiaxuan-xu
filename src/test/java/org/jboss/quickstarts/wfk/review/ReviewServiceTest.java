@@ -38,6 +38,7 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -111,16 +112,16 @@ public class ReviewServiceTest {
 	@InSequence(1)
 	public void testReview() throws Exception {
 		// Create a new user
-		User user = createUserInstance("Jack Doe", "jack@mailinator.com", "04475368829");
+		User user = createUserInstance("Jack Doeo", "jack1@mailinator.com", "04475368829");
 		Response userResponse = userRestService.createUser(user);
 		assertEquals("Unexcept error happened", Response.Status.CREATED.getStatusCode(), userResponse.getStatus());
 
 		// Create a new restaurant
-		Restaurant restaurant = createRestaurantInstance("Smith's","01234567890", "AB16HO");
+		Restaurant restaurant = createRestaurantInstance("Smiths","01234567890", "AB16HO");
 		Response restaurantResponse = restaurantRestService.createRestaurant(restaurant);
 		assertEquals("Unexcept error happened", Response.Status.CREATED.getStatusCode(), restaurantResponse.getStatus());
 
-		Review review = createReviewInstance(user.getId(), getRandomFutureDate(), restaurant.getId());
+		Review review = createReviewInstance(user.getId(), restaurant.getId(), "This is an excellent restaurant", 5);
 		Response response = reviewRestService.createReview(review);
 
 		assertEquals("Unexpected response status", Response.Status.CREATED.getStatusCode(), response.getStatus());
@@ -132,14 +133,14 @@ public class ReviewServiceTest {
 	@InSequence(2)
 	public void testInvalidReview() {
 		// Retrieve an existing user
-		User user = createUserInstance("Jack Doe", "jack@mailinator.com", "04475368829");
+		User user = createUserInstance("Jack Doe", "jack2@mailinator.com", "04475368829");
 		Response userResponse = userRestService.createUser(user);
 
 		// Create a new restaurant
-		Restaurant restaurant = createRestaurantInstance("Smith's","01234567890", "AB16HO");
+		Restaurant restaurant = createRestaurantInstance("Smiths","01234567891", "AB16HO");
 		Response restaurantResponse = restaurantRestService.createRestaurant(restaurant);
 
-		Review review = createReviewInstance(user.getId(), new Date(), restaurant.getId());
+		Review review = createReviewInstance(user.getId(), restaurant.getId(), "This is an excellent restaurant", 6);
 		try {
 			Response response = reviewRestService.createReview(review);
 			fail("Expected a RestServiceException to be thrown");
@@ -156,6 +157,17 @@ public class ReviewServiceTest {
 	@InSequence(4)
 	public void testGetReviewList() {
 		try {
+			// Retrieve an existing user
+			User user = createUserInstance("Jack Doie", "jack3@mailinator.com", "04475368829");
+			Response userResponse = userRestService.createUser(user);
+
+			// Create a new restaurant
+			Restaurant restaurant = createRestaurantInstance("Smiths","01234567890", "AB16HO");
+			Response restaurantResponse = restaurantRestService.createRestaurant(restaurant);
+
+			Review review = createReviewInstance(user.getId(), restaurant.getId(), "This is an excellent restaurant", 5);
+			reviewRestService.createReview(review);
+
 			Response response = reviewRestService.retrieveAllReviewsByUserId(null);
 			List<Review> reviews = response.readEntity(new GenericType<List<Review>>() {
 			});
@@ -170,11 +182,12 @@ public class ReviewServiceTest {
 	 * testing. This object is not persisted.</p>
 	 *
 	 * @param userId  the user id who books this order
-	 * @param reviewDate the date of this review
 	 * @param restaurantId      the restaurant id of this review
+	 * @param content           The content of review
+	 * @param rating            The score of review
 	 * @return The Review object create
 	 */
-	private Review createReviewInstance(Long userId, Date reviewDate, Long restaurantId) {
+	private Review createReviewInstance(Long userId, Long restaurantId, String content, int rating) {
 		Review review = new Review();
 		User user = new User();
 		user.setId(userId);
@@ -182,6 +195,8 @@ public class ReviewServiceTest {
 		Restaurant restaurant = new Restaurant();
 		restaurant.setId(restaurantId);
 		review.setRestaurant(restaurant);
+		review.setRating(rating);
+		review.setReview(content);
 		return review;
 	}
 
